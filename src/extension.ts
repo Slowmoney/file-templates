@@ -20,42 +20,48 @@ export function activate(context: vscode.ExtensionContext) {
 
 		let originalContent = fs.readFileSync(filePath, 'utf-8');
 
-		const executor = new TemplateExecutor({ input: originalFileName }, originalContent);
+		const executor = new TemplateExecutor({ input: originalFileName, folder: '' }, originalContent);
 		executor.setTargetPath(targetPath);
 		executor.exec();
 	};
 
 	const disposable = vscode.commands.registerCommand('file-templates.show', async (uri: vscode.Uri) => {
-		const prefabsPath = path.resolve(__dirname, './templates');
+		try {
+			const prefabsPath = path.resolve(__dirname, './templates');
 
-		const workspaceFolders = (vscode.workspace.workspaceFolders?.map(e => {
-			return {path:path.resolve(e.uri.fsPath, './.vscode', './.templates'), name: e.name};
-		}) ?? []).filter(e => fs.existsSync(e.path));
+			const workspaceFolders = (vscode.workspace.workspaceFolders?.map(e => {
+				return { path: path.resolve(e.uri.fsPath, './.vscode', './.templates'), name: e.name };
+			}) ?? []).filter(e => fs.existsSync(e.path));
 
 
-		const tree: Node = {
-			type: 'dir',
-			name: 'root',
-			path: '',
-			children: [
-				...workspaceFolders.map(e => readDirTree(e.path, e.name)),
-				readDirTree(prefabsPath, 'examples'),
-			]
-		};
+			const tree: Node = {
+				type: 'dir',
+				name: 'root',
+				path: '',
+				children: [
+					...workspaceFolders.map(e => readDirTree(e.path, e.name)),
+					readDirTree(prefabsPath, 'examples'),
+				]
+			};
 
-		let root = tree;
-		const paths: string[] = [];
-		while (root) {
-			let res = await showList(root);
-			if (!res) { break; }
-			paths.push(res.name);
-			root = res;
-			if (root.type === 'file') { break; }
+			let root = tree;
+			const paths: string[] = [];
+			while (root) {
+				let res = await showList(root);
+				if (!res) { break; }
+				paths.push(res.name);
+				root = res;
+				if (root.type === 'file') { break; }
+			}
+
+			if (root.type !== 'file') { return; }
+			const filePath = root.path;
+			createFile(uri.fsPath, filePath, root.name);
+		} catch (error) {
+			//@ts-ignore
+			vscode.window.showInformationMessage(`Create file error`, error.toString());
 		}
 
-		if (root.type !== 'file') {return;}
-		const filePath = root.path;
-		createFile(uri.fsPath, filePath, root.name);
 	});
 
 	context.subscriptions.push(disposable);

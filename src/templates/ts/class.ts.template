@@ -1,1 +1,4 @@
-export class %filenamePascalCase {}
+#filename:%input|>kebab-case
+#className:%input|>pascal-case
+#ext:ts
+export class %className {}

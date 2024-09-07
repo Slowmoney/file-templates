@@ -52,14 +52,14 @@ export class TemplateExecutor{
         const folder = path.join(this.targetPath, file.variables['folder']);
         fs.mkdirSync(folder, { recursive: true });
         if (result && file.content.some(Boolean)) {
-            const resultPath = path.join(this.targetPath, file.variables['folder'], `./${file.variables['filename']}.${file.variables['ext']}`);
+            const resultPath = path.join(this.targetPath, file.variables['folder'], `./${file.variables['filename'] || `%filename`}.${file.variables['ext'] || '%ext'}`);
             fs.writeFileSync(resultPath, result, 'utf8',);
         }
     }
 
     parseLine(text: string) {
         for (const key in this.variables) {
-            text = text.replace(`%${key}`, this.variables[key]);
+            text = text.replaceAll(`%${key}`, this.variables[key] ?? `%${key}`);
         }
         return text;
     }

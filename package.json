@@ -2,7 +2,7 @@
   "name": "file-templates",
   "displayName": "Fast File Creator",
   "description": "Quick create files with templates",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.93.0"
   },
@@ -10,6 +10,7 @@
     "Other",
     "Snippets"
   ],
+  "icon": "icon.png",
   "publisher": "Slowmoney",
   "license": "MIT",
   "repository": "https://github.com/Slowmoney/file-templates",

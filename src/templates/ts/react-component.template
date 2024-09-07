@@ -1,0 +1,52 @@
+#filename:%input|>pascal-case
+#functionName:%input|>pascal-case
+#folder:%input|>pascal-case
+#ext:tsx
+import "./%filename.scss";
+#className:%input|>kebab-case
+export interface I%functionNameProps {}
+
+export function %functionName(props: I%functionNameProps) {
+    return (<div class="%className"}></div>)
+}
+
+#split
+#ext:ts
+#filename:index
+export { default } from "./%functionName";
+
+#split
+#name:%input|>pascal-case
+#ext:scss
+#filename:full-hd
+#folder:%name/styles
+#className:%input|>kebab-case
+.%className {
+
+}
+
+#split
+
+#folder:%name/styles
+#filename:mobile
+#ext:scss
+#className:%input|>kebab-case
+.%className {
+
+}
+
+#split
+#folder:%name
+#filename:%functionName
+#ext:module.scss
+
+@import 'src/assets/styles/variables';
+@import 'src/assets/styles/mixins';
+
+@include media-full-hd {
+  @import './styles/full-hd';
+}
+
+@include media-mobile {
+  @import './styles/mobile';
+}

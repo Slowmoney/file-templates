@@ -1,13 +1,13 @@
-#filename-case:kebab-case
-#folder:%filename
+#filename:%input|>kebab-case
+#folder:%filename|>kebab-case
+#className:%input|>pascal-case
 #ext:repository.ts
-import { Injectable } from "@nestjs/common";
-import type { %filenamePascalCaseInterface } from "./%filename.interface";
 
-@Injectable()
-export class %filenamePascalCaseRepository implements %filenamePascalCaseInterface {}
+import type { %classNameInterface } from "./%filename.interface";
+
+export class %classNameRepository implements %classNameInterface {}
+
 
 #split
 #ext:interface.ts
-#filename-case:kebab-case
-export interface %filenamePascalCaseInterface {}
+export interface %classNameInterface {}

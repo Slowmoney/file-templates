@@ -1,4 +1,7 @@
+#filename:%input|>kebab-case
+#className:%input|>pascal-case
+#ext:repository.ts
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class %filenamePascalCase {}
+export class %classNameRepository {}
