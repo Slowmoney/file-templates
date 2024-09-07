@@ -1,0 +1,8 @@
+#moduleFolder:%input|>kebab-case
+#folder:%moduleFolder/domain
+#ext:module.ts
+#filename:domain
+import { Module } from "@nestjs/common";
+
+@Module({})
+export class DomainModule {}

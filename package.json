@@ -1,14 +1,18 @@
 {
   "name": "file-templates",
-  "displayName": "file-templates",
+  "displayName": "Fast File Creator",
   "description": "Quick create files with templates",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.93.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Snippets"
   ],
+  "publisher": "Slowmoney",
+  "license": "MIT",
+  "repository": "https://github.com/Slowmoney/file-templates",
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
@@ -32,15 +36,15 @@
     "submenus": []
   },
   "scripts": {
-    "vscode:prepublish": "pnpm run package",
-    "compile": "pnpm run check-types && pnpm run lint && node esbuild.js",
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
     "watch": "npm-run-all -p watch:*",
     "watch:esbuild": "node esbuild.js --watch",
     "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
-    "package": "pnpm run check-types && pnpm run lint && node esbuild.js --production",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "check-types": "tsc --noEmit",
     "lint": "eslint src",
     "test": "vscode-test"
@@ -56,10 +60,10 @@
     "esbuild": "^0.23.1",
     "eslint": "^9.9.1",
     "npm-run-all": "^4.1.5",
+    "esbuild-copy-files": "^0.2.14",
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "change-case": "^5.4.4",
-    "esbuild-copy-files": "^0.2.14"
+    "change-case": "^5.4.4"
   }
 }

@@ -5,6 +5,7 @@ const production = process.argv.includes('--production');
 const watch = process.argv.includes('--watch');
 const sourceDir = path.resolve(__dirname, './src');
 const destDir = path.resolve(__dirname, './dist');
+
 /**
  * @type {import('esbuild').Plugin}
  */
@@ -45,7 +46,7 @@ async function main() {
 			esbuildProblemMatcherPlugin,
 			copy({
 				// When setting to true, make sure using esbuild's watch mode (ctx.watch())
-				watch: true,
+				watch: !production,
 				patterns: [
 					{
 						from: [`${sourceDir}/templates`],

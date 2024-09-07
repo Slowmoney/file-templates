@@ -1,71 +1,39 @@
-# file-templates README
+# Fast File Creator
 
-This is the README for your extension "file-templates". After writing up a brief description, we recommend including the following sections.
+Easily Create Files Using Templates
+It must have occurred to you that you have to write duplicate code when creating each file. This extension solves this problem for you using templates!
 
-## Features
+## How to Add
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Create .templates folder in .vscode
 
-For example if there is an image subfolder under your extension project workspace:
+create file with expression .template
 
-\!\[feature X\]\(images/feature-x.png\)
+## How Write Template
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+%input is variables from input |> pipe for change case
 
-## Requirements
+for example %input = exampleText
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+#moduleFolder:%input|>kebab-case
+#folder:%moduleFolder/domain
+#ext:module.ts
+#filename:domain
+import { Module } from "@nestjs/common";
 
-## Extension Settings
+@Module({})
+export class DomainModule {}
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+this template saves as ./example-text/domain/domain.module.ts
 
-For example:
+to save file must be set #filename
 
-This extension contributes the following settings:
+expression #split uses for create many files
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+### available cases
 
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+kebab-case
+camel-case
+pascal-case
+constant-case
+path-case
