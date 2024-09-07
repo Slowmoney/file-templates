@@ -1,0 +1,52 @@
+#moduleFolder:%input|>kebab-case
+#folder:%moduleFolder/application
+#ext:module.ts
+#filename:application
+import { Module } from "@nestjs/common";
+import { InfrastructureModule } from "../infrastructure/infrastructure.module";
+
+@Module({
+    imports: [InfrastructureModule]
+})
+export class ApplicationModule {}
+
+#split
+#folder:%moduleFolder/domain
+#ext:module.ts
+#filename:domain
+import { Module } from "@nestjs/common";
+
+@Module({})
+export class DomainModule {}
+
+#split
+#folder:%moduleFolder/infrastructure
+#ext:module.ts
+#filename:infrastructure
+import { Module } from "@nestjs/common";
+
+@Module({})
+export class InfrastructureModule {}
+
+#split
+#filename:
+#ext:
+#folder:%moduleFolder/domain/models
+
+#split
+#filename:
+#ext:
+#folder:%moduleFolder/infrastructure/adapters
+
+#split
+#folder:%moduleFolder
+#ext:module.ts
+#filename:%input|>kebab-case
+#name:%input|>pascal-case
+import { Module } from "@nestjs/common";
+import { ApplicationModule } from "./application/application.module";
+
+@Module({
+    imports: [ApplicationModule]
+})
+export class %nameModule {}

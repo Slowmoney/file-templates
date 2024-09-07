@@ -15,6 +15,7 @@
     "commands": [
       {
         "command": "file-templates.show",
+        "category": "Create",
         "title": "Fast File Create"
       }
     ],
@@ -23,6 +24,7 @@
       "explorer/context": [
         {
           "command": "file-templates.show",
+          "group": "navigation",
           "when": "explorerResourceIsFolder"
         }
       ]
