@@ -7,7 +7,7 @@ import "./%filename.scss";
 export interface I%functionNameProps {}
 
 export function %functionName(props: I%functionNameProps) {
-    return (<div class="%className"}></div>)
+    return (<div class="%className"></div>)
 }
 
 #split

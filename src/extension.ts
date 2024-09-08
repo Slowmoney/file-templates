@@ -23,6 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const executor = new TemplateExecutor({ input: originalFileName, folder: '' }, originalContent);
 		executor.setTargetPath(targetPath);
 		await executor.exec();
+		executor.save();
 	};
 
 	const disposable = vscode.commands.registerCommand('file-templates.show', async (uri: vscode.Uri) => {
