@@ -22,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const executor = new TemplateExecutor({ input: originalFileName, folder: '' }, originalContent);
 		executor.setTargetPath(targetPath);
-		executor.exec();
+		await executor.exec();
 	};
 
 	const disposable = vscode.commands.registerCommand('file-templates.show', async (uri: vscode.Uri) => {
@@ -56,7 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 			if (root.type !== 'file') { return; }
 			const filePath = root.path;
-			createFile(uri.fsPath, filePath, root.name);
+			await createFile(uri.fsPath, filePath, root.name);
 		} catch (error) {
 			//@ts-ignore
 			vscode.window.showInformationMessage(`Create file error`, error.toString());

@@ -19,14 +19,13 @@ export { default } from "./%functionName";
 #name:%input|>pascal-case
 #ext:scss
 #filename:full-hd
-#folder:%name/styles
+#folder:%input|>pascal-case|>/styles
 #className:%input|>kebab-case
 .%className {
 
 }
 
 #split
-
 #folder:%name/styles
 #filename:mobile
 #ext:scss
