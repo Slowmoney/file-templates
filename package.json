@@ -2,7 +2,7 @@
   "name": "file-templates",
   "displayName": "Fast File Creator",
   "description": "Quick create files with templates",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.93.0"
   },
