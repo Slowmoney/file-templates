@@ -1,68 +1,49 @@
-import fs from 'fs';
-import path from 'path';
 import * as vscode from 'vscode';
-import { Node, readDirTree } from './read-dir-tree';
+import { FsNodeResolver } from './fs-node-resolver';
+import { StateView } from './state-view';
 import { TemplateExecutor } from './template-executor';
 
+const SHOW_COMMAND = 'file-templates.show';
 export function activate(context: vscode.ExtensionContext) {
-	async function showList(node: Node) {
-		const selectedCustomFile = await vscode.window.showQuickPick(node.children.map(e => e.name), { title: 'Custom Templates', });
-		if (!selectedCustomFile) {
-			return null;
+	const stateView = new StateView(SHOW_COMMAND, context);
+	const fsNodeResolver = new FsNodeResolver();
+
+	const createFile = async (targetPath: string, filePath: string) => {
+		stateView.show('Read templates folders');
+		let templateData = await fsNodeResolver.getTemplate(filePath);
+		if (!templateData) {
+			return;
 		}
-
-		return node.children.find(e => e.name === selectedCustomFile)!;
-	}
-
-	const createFile = async (targetPath: string, filePath: string, templateName: string) => {
-		let originalFileName = await vscode.window.showInputBox({ title: 'File Name' });
-		if (!originalFileName) { return; }
-
-		let originalContent = fs.readFileSync(filePath, 'utf-8');
-
-		const executor = new TemplateExecutor({ input: originalFileName, folder: '' }, originalContent);
+		const executor = new TemplateExecutor({ input: templateData.inputVariable, folder: '' }, templateData.templateContext);
 		executor.setTargetPath(targetPath);
-		await executor.exec();
-		executor.save();
+		await executor.exec((state: string) => {
+			stateView.show(state);
+		});
+		executor.save((state: string) => {
+			stateView.show(state);
+		});
+		vscode.window.showInformationMessage(`Complete creating ${executor.files.length} files`);
 	};
 
-	const disposable = vscode.commands.registerCommand('file-templates.show', async (uri: vscode.Uri) => {
+
+	const disposable = vscode.commands.registerCommand(SHOW_COMMAND, async (uri: vscode.Uri) => {
 		try {
-			const prefabsPath = path.resolve(__dirname, './templates');
-
-			const workspaceFolders = (vscode.workspace.workspaceFolders?.map(e => {
-				return { path: path.resolve(e.uri.fsPath, './.vscode', './.templates'), name: e.name };
-			}) ?? []).filter(e => fs.existsSync(e.path));
-
-
-			const tree: Node = {
-				type: 'dir',
-				name: 'root',
-				path: '',
-				children: [
-					...workspaceFolders.map(e => readDirTree(e.path, e.name)),
-					readDirTree(prefabsPath, 'examples'),
-				]
-			};
-
-			let root = tree;
-			const paths: string[] = [];
-			while (root) {
-				let res = await showList(root);
-				if (!res) { break; }
-				paths.push(res.name);
-				root = res;
-				if (root.type === 'file') { break; }
+			let targetPath: string | undefined = uri?.fsPath;
+			if (!targetPath) {
+				targetPath = await vscode.window.showInputBox({ title: 'Target folder' });
 			}
-
-			if (root.type !== 'file') { return; }
-			const filePath = root.path;
-			await createFile(uri.fsPath, filePath, root.name);
+			if (!targetPath) {
+				throw new Error("Select folder and launch command");
+			}
+			stateView.show('Resolving folders');
+			const data = await fsNodeResolver.resolve();
+			if (!data) { return; }
+			await createFile(uri.fsPath, data.filePath);
 		} catch (error) {
 			//@ts-ignore
-			vscode.window.showInformationMessage(`Create file error`, error.toString());
+			vscode.window.showErrorMessage(`Create file error`, error.toString());
 		}
-
+		stateView.hide();
 	});
 
 	context.subscriptions.push(disposable);

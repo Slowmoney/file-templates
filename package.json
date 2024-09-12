@@ -1,5 +1,5 @@
 {
-  "name": "file-templates",
+  "name": "fast-file-creator",
   "displayName": "Fast File Creator",
   "description": "Quick create files with templates",
   "version": "0.0.4",
@@ -11,7 +11,7 @@
     "Snippets"
   ],
   "icon": "icon.png",
-  "publisher": "Slowmoney",
+  "publisher": "yarikfrol",
   "license": "MIT",
   "repository": "https://github.com/Slowmoney/file-templates",
   "activationEvents": [],

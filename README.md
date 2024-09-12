@@ -9,18 +9,20 @@ It must have occurred to you that you have to write duplicate code when creating
 
 To save file you must be set variables ```ext``` and ```filename```
 
-##### For Example
+### Examples
 
-```
+#### For Example
+
+```ts
 #ext:js
 #filename:index
 ```
 
 This example save file as ./index.js without text
 
-##### Example With Text
+#### Example With Text
 
-```
+```ts
 #ext:js
 #filename:index
 function add(a, b) {
@@ -30,30 +32,33 @@ function add(a, b) {
 
 This example save file as ./index.js with text
 
-```
+```ts
 function add(a, b) {
     return a + b;
 }
 ```
 
-##### Example with input
+#### Example with input
 
 ```%input``` is variable from you input on call command
 for example you write myAddFunction
-```
+
+```ts
 #ext:js
 #filename:%input
 function add(a, b) {
     return a + b;
 }
 ```
+
 File saved as myAddFunction.js
 
-##### Change casing
+#### Change casing
+
 ```%input``` is variable from you input on call command
 for example you write myAddFunction
 
-```
+```ts
 #ext:js
 #filename:%input|>camel-case
 function add(a, b) {
@@ -63,7 +68,7 @@ function add(a, b) {
 
 File saved as my-add-function.js
 
-##### Create many files
+#### Create many files
 
 ```%input``` is variable from you input on call command
 for example you write User
@@ -125,8 +130,8 @@ Expression ```#split``` uses for create many files
 
 ### Available cases
 
-kebab-case
-camel-case
-pascal-case
-constant-case
-path-case
+- kebab-case
+- camel-case
+- pascal-case
+- constant-case
+- path-case
