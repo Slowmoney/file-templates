@@ -1,8 +1,10 @@
 import * as assert from 'assert';
 import { readFileSync } from 'fs';
 import { TemplateExecutor } from '../template-executor.js';
+import { suite, test } from "node:test";
 
-suite('Extension Test Suite', () => {
+const DIRNAME = `.`;
+suite('Extension Test Suite', async () => {
 	test('Pipe Concat Pascal', async () => {
 		const executor = new TemplateExecutor({ input: '/home/work' }, `#folder:%input|>pascal-case|>/styles|>pascal-case`);
 		const files = await executor.exec();
@@ -80,7 +82,7 @@ suite('Extension Test Suite', () => {
 	});
 
 	test('Nest ddd template', async () => {
-		const template = readFileSync('../../src/templates/ts/nest-ddd.template', 'utf-8');
+		const template = readFileSync(`${DIRNAME}/src/templates/ts/nest-ddd.template`, 'utf-8');
 		const executor = new TemplateExecutor({ input: 'BigData' }, template);
 		const files = await executor.exec();
 
@@ -124,6 +126,7 @@ suite('Extension Test Suite', () => {
 		assert.equal(files[4].text, "");
 
 		assert.equal(files[5].folder, "big-data");
+		assert.equal(files[5].getVariable('name'), "BigData");
 		assert.equal(files[5].filename, "big-data.module.ts");
 		assert.equal(files[5].getVariable('ext'), "module.ts");
 		assert.equal(files[5].text, 'import { Module } from "@nestjs/common";\n' +
@@ -136,9 +139,9 @@ suite('Extension Test Suite', () => {
 	});
 
 	test('React template', async () => {
-		const template = readFileSync('../../src/templates/ts/react-component.template', 'utf-8');
+		const template = readFileSync(`${DIRNAME}/src/templates/ts/react-component.template`, 'utf-8');
 		const executor = new TemplateExecutor({ input: 'myButton' }, template);
-		const files = await executor.exec();
+		const files = await executor.exec(()=>{});
 
 		assert.equal(files.length, 5);
 		for (const file of files) {
@@ -176,6 +179,41 @@ suite('Extension Test Suite', () => {
 		assert.equal(files[4].getVariable('folder'), 'MyButton');
 		assert.equal(files[4].getVariable('ext'), 'module.scss');
 		assert.equal(files[4].getVariable('className'), 'my-button');
+	});
+
+
+	await test('Cqrs 2', async (t) => {
+		const template = readFileSync(`${DIRNAME}/src/templates/ts/cqrs-command.template`, 'utf-8');
+		const executor = new TemplateExecutor({ input: 'BigData' }, template);
+		const files = await executor.exec();
+		//console.log(`🚀 ~ test ~ files:`, files);
+
+		await t.test('Files Count', () => {
+			assert.equal(files.length, 2);
+		});
+		/* t.test('Variable moduleFolder', () => {
+			for (const file of files) {
+				assert.equal(file.getVariable('moduleFolder'), 'big-data');
+			}
+		}); */
+
+
+		await t.test('File 1 folder', () => {
+			assert.equal(files[0].folder, "commands");
+		});
+		await t.test('File 1 filename', () => {
+			assert.equal(files[0].filename, "big-data.command.ts");
+		});
+		await t.test('File 1 ext', () => {
+			assert.equal(files[0].getVariable('ext'), "command.ts");
+		});
+		await t.test('File 1 content', () => {
+			assert.equal(files[0].text, 'import { Command } from "@nestjs/cqrs";\n\nexport class BigDataCommand extends Command<{}>{\n    constructor() {\n        super()\n    }\n}');
+		});
+
+
+
+
 	});
 
 });

@@ -33,6 +33,14 @@ export class FileTemplate {
         return this.variables[name] || `%${name}`;
     }
 
+    getVariables() {
+        return this.variables;
+    }
+
+    setVariable(name:string, value: string) {
+        this.variables[name] = value;
+    }
+
     save(targetPath: string) {
         const result = this.text;
         const folder = path.join(targetPath, this.folder);

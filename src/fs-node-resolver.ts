@@ -20,6 +20,16 @@ export class FsNodeResolver {
             return { path: path.resolve(e.uri.fsPath, './.vscode', './.templates'), name: e.name };
         }) ?? []).filter(e => fs.existsSync(e.path));
 
+        let config = vscode.workspace.getConfiguration('fastFileCreator').get<string>('userTemplates');
+
+        if (config) {
+            if (fs.existsSync(config)) {
+                workspaceFolders.push({
+                    path: config,
+                    name: 'User Templates'
+                });
+            }
+        }
 
         const tree: Node = {
             type: 'dir',

@@ -1,0 +1,36 @@
+#inputFileName:%input|>kebab-case
+#folder:commands
+#ext:command.ts
+#filename:%inputFileName
+#className:%input|>pascal-case
+import { Command } from "@nestjs/cqrs";
+
+export class %classNameCommand extends Command<{}>{
+    constructor() {
+        super()
+    }
+}
+#endfile
+#folder:handlers
+#ext:handler.ts
+#filename:%inputFileName|>-command
+import { CommandHandler, type ICommandHandler } from "@nestjs/cqrs";
+import { %classNameCommand } from "../commands/%inputFileName.command";
+
+@CommandHandler(%classNameCommand)
+export class %classNameCommandHandler implements ICommandHandler<%classNameCommand>{
+    constructor() {}
+    async execute(command: %classNameCommand): Promise<any> {
+
+    }
+}
+#endfile
+#endfile
+
+#endfile
+
+
+
+#endfile
+#endfile
+
